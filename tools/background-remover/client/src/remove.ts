@@ -41,12 +41,13 @@ export async function removeImageBackground(
   await preloadCutoutModel(onProgress).catch(() => undefined);
   try {
     const blob = await removeWithAi(prepared, onProgress);
-    return { blob, fallback: false };
+    onProgress("Cleaning the cutout…", 92);
+    return { blob: await refineCutout(blob), fallback: false };
   } catch (error) {
     console.warn("AI background removal failed, using edge fill.", error);
     onProgress("Using a simpler backup method…", 70);
     const blob = await removeByEdgeFill(prepared);
-    return { blob, fallback: true };
+    return { blob: await refineCutout(blob), fallback: true };
   }
 }
 
@@ -54,7 +55,7 @@ function aiConfig(onProgress?: ProgressFn) {
   return {
     device: "cpu" as const,
     proxyToWorker: false,
-    model: "isnet_quint8" as const,
+    model: "isnet_fp16" as const,
     output: {
       format: "image/png" as const,
       quality: 1,
@@ -83,12 +84,56 @@ export async function preloadCutoutModel(onProgress?: ProgressFn): Promise<void>
 }
 
 async function removeWithAi(source: Blob, onProgress: ProgressFn): Promise<Blob> {
-  const { removeBackground } = await import("@imgly/background-removal");
-  const blob = await removeBackground(source, aiConfig(onProgress));
-  if (!(blob instanceof Blob)) {
-    throw new Error("Background removal did not return an image.");
+  const hardwareThreads = Object.getOwnPropertyDescriptor(navigator, "hardwareConcurrency");
+  try {
+    Object.defineProperty(navigator, "hardwareConcurrency", {
+      configurable: true,
+      get: () => 1,
+    });
+  } catch {
+    /* GitHub Pages has no COOP/COEP, so keep inference on one thread. */
   }
-  return blob;
+
+  try {
+    const { removeBackground } = await import("@imgly/background-removal");
+    const blob = await removeBackground(source, aiConfig(onProgress));
+    if (!(blob instanceof Blob)) {
+      throw new Error("Background removal did not return an image.");
+    }
+    return blob;
+  } finally {
+    if (hardwareThreads) {
+      try {
+        Object.defineProperty(navigator, "hardwareConcurrency", hardwareThreads);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+}
+
+export async function refineCutout(source: Blob): Promise<Blob> {
+  const bitmap = await createImageBitmap(source);
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) {
+    bitmap.close();
+    return source;
+  }
+  ctx.drawImage(bitmap, 0, 0);
+  bitmap.close();
+  const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { data } = image;
+  for (let i = 3; i < data.length; i += 4) {
+    const alpha = data[i];
+    if (alpha < 40) data[i] = 0;
+    else if (alpha > 180) data[i] = 255;
+    else data[i] = Math.round(((alpha - 40) / 140) * 255);
+  }
+  ctx.putImageData(image, 0, 0);
+  return canvasToBlob(canvas, "image/png");
 }
 
 export async function removeByEdgeFill(source: Blob, tolerance = 36): Promise<Blob> {

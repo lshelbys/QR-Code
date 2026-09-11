@@ -104,6 +104,8 @@ function reset(keepError = false) {
   background = "transparent";
   els.originalImg.removeAttribute("src");
   els.resultImg.removeAttribute("src");
+  els.originalImg.alt = "";
+  els.resultImg.alt = "";
   els.empty.hidden = false;
   els.workspace.hidden = true;
   els.fileInput.value = "";
@@ -166,6 +168,7 @@ async function processFile(file: File) {
   revoke(originalUrl);
   originalUrl = URL.createObjectURL(file);
   els.originalImg.src = originalUrl;
+  els.originalImg.alt = "Original upload";
   els.empty.hidden = true;
   els.workspace.hidden = false;
 
@@ -174,6 +177,7 @@ async function processFile(file: File) {
     revoke(cutoutUrl);
     cutoutBlob = result.blob;
     cutoutUrl = URL.createObjectURL(result.blob);
+    els.resultImg.alt = "Background removed preview";
     setBackground(background);
     setStatus(
       result.fallback
