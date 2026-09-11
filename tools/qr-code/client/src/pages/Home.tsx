@@ -1,4 +1,4 @@
-import { hubHref } from "@/lib/base";
+import { backgroundRemoverHref, hubHref } from "@/lib/base";
 import * as QRCode from "qrcode";
 import {
   AtSign,
@@ -795,6 +795,11 @@ export default function Home() {
                   QR Code
                 </a>
               </li>
+              <li>
+                <a href={backgroundRemoverHref} className="nav__link" onClick={() => setMobileNavOpen(false)}>
+                  Background Remover
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -1038,6 +1043,9 @@ export default function Home() {
               </a>
               <a href="#generator" className="footer__link">
                 QR Code
+              </a>
+              <a href={backgroundRemoverHref} className="footer__link">
+                Background Remover
               </a>
             </nav>
             <span className="footer__copy">© {new Date().getFullYear()} Duckingo. All-in-one tools.</span>
