@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Duckingo Image Studio — crop, resize, remove backgrounds, and export PNG, JPEG, or WebP." />
+  <title>Image Studio — Duckingo</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="/QR-Code/tools/image-studio/assets/index-DkjO5YWz.js"></script>
+  <link rel="stylesheet" crossorigin href="/QR-Code/tools/image-studio/assets/index-BMeMbePh.css">
+</head>
+<body>
+  <a class="skip-link" href="#stage">Skip to canvas</a>
+  <div class="app" id="app">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <div class="nav__inner">
+          <a href="../../" class="nav__logo">Duckingo</a>
+          <button type="button" class="nav__menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+          <ul class="nav__links" role="list">
+            <li><a href="../../" class="nav__link">Chat</a></li>
+            <li><a href="../qr-code/" class="nav__link">QR Code</a></li>
+            <li><a href="./" class="nav__link is-active">Image Studio</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="workspace">
+      <aside class="sidebar" id="sidebar" aria-label="Tools">
+        <a class="btn btn--primary sidebar__new" href="../../">＋ New chat</a>
+        <p class="sidebar__label">Assistant</p>
+        <ul class="tool-list">
+          <li>
+            <a class="tool-item" href="../../">
+              <span class="tool-item__icon" aria-hidden="true">✦</span>
+              <span class="tool-item__meta">
+                <span class="tool-item__name">Duckingo Chat</span>
+                <span class="tool-item__hint">Ask anything</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <p class="sidebar__label" style="margin-top:22px;">Tools</p>
+        <ul class="tool-list">
+          <li>
+            <a class="tool-item" href="../qr-code/">
+              <span class="tool-item__icon" aria-hidden="true">▣</span>
+              <span class="tool-item__meta">
+                <span class="tool-item__name">QR Code Generator</span>
+                <span class="tool-item__hint">Create and export codes</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="tool-item is-active" href="./">
+              <span class="tool-item__icon" aria-hidden="true">▦</span>
+              <span class="tool-item__meta">
+                <span class="tool-item__name">Image Studio</span>
+                <span class="tool-item__hint">Crop, cut out, convert</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <p class="sidebar__foot">Crop · Resize · Background · Export</p>
+      </aside>
+
+      <section class="studio" aria-label="Image studio">
+        <header class="chat__header">
+          <div class="chat__identity">
+            <span class="mark" aria-hidden="true">▦</span>
+            <div>
+              <p class="chat__title">Image Studio</p>
+              <p class="chat__sub">Upload once, then crop, resize, remove the background, and export</p>
+            </div>
+          </div>
+          <span class="badge">In browser</span>
+        </header>
+
+        <div class="studio-shell">
+          <nav class="rail" aria-label="Studio tools">
+            <button type="button" class="rail__btn is-active" data-tool="crop" title="Crop">
+              <span aria-hidden="true">▭</span><span>Crop</span>
+            </button>
+            <button type="button" class="rail__btn" data-tool="resize" title="Resize">
+              <span aria-hidden="true">⤢</span><span>Resize</span>
+            </button>
+            <button type="button" class="rail__btn" data-tool="background" title="Background">
+              <span aria-hidden="true">◇</span><span>Background</span>
+            </button>
+            <button type="button" class="rail__btn" data-tool="export" title="Export">
+              <span aria-hidden="true">⇩</span><span>Export</span>
+            </button>
+          </nav>
+
+          <div class="canvas-col">
+            <p class="error" id="error" hidden></p>
+            <div id="empty-panel">
+              <div class="dropzone" id="dropzone">
+                <input id="file-input" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,.png,.jpg,.jpeg,.webp,.bmp" />
+                <p class="empty__eyebrow">PNG · JPG · WebP</p>
+                <h1 class="empty__title">Drop a photo to start</h1>
+                <p class="empty__lead">Crop, resize, cut out the background, then export PNG, JPEG, or WebP — all in one desk.</p>
+                <button type="button" class="btn btn--primary" id="browse-btn">Choose image</button>
+                <p class="composer__note" style="margin-top:16px;">You can also paste an image from the clipboard.</p>
+              </div>
+            </div>
+
+            <div id="workspace-panel" hidden>
+              <div class="stage-wrap">
+                <div class="stage" id="stage">
+                  <img id="preview" alt="" />
+                  <div class="crop" id="crop" hidden>
+                    <div class="crop__box" id="crop-box">
+                      <span class="crop__handle" data-handle="nw"></span>
+                      <span class="crop__handle" data-handle="ne"></span>
+                      <span class="crop__handle" data-handle="sw"></span>
+                      <span class="crop__handle" data-handle="se"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="status-row">
+                <progress id="progress" max="100" value="0" hidden></progress>
+                <p id="status" class="status-text"></p>
+                <p id="meta" class="meta-text"></p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="inspector" aria-label="Tool settings">
+            <section class="panel" data-panel="crop">
+              <h2>Crop</h2>
+              <p class="controls__lead">Drag the box on the canvas. Apply to keep only that region.</p>
+              <label class="field">
+                <span>Aspect</span>
+                <select id="crop-aspect">
+                  <option value="free">Free</option>
+                  <option value="1">1:1</option>
+                  <option value="1.333">4:3</option>
+                  <option value="1.777">16:9</option>
+                  <option value="0.8">4:5</option>
+                </select>
+              </label>
+              <div class="controls__actions">
+                <button type="button" class="btn btn--primary" id="crop-apply">Apply crop</button>
+                <button type="button" class="btn" id="crop-reset">Reset crop</button>
+              </div>
+            </section>
+
+            <section class="panel" data-panel="resize" hidden>
+              <h2>Resize</h2>
+              <p class="controls__lead">Set the export size in pixels. Lock ratio to keep proportions.</p>
+              <label class="check">
+                <input type="checkbox" id="lock-ratio" checked />
+                <span>Lock aspect ratio</span>
+              </label>
+              <div class="size-row">
+                <label class="field">
+                  <span>Width</span>
+                  <input id="resize-w" type="number" min="1" max="8192" />
+                </label>
+                <label class="field">
+                  <span>Height</span>
+                  <input id="resize-h" type="number" min="1" max="8192" />
+                </label>
+              </div>
+              <div class="preset-row">
+                <button type="button" class="btn btn--sm" data-scale="1">100%</button>
+                <button type="button" class="btn btn--sm" data-scale="0.5">50%</button>
+                <button type="button" class="btn btn--sm" data-width="1920">1920 wide</button>
+                <button type="button" class="btn btn--sm" data-width="1080">1080 wide</button>
+              </div>
+            </section>
+
+            <section class="panel" data-panel="background" hidden>
+              <h2>Background</h2>
+              <p class="controls__lead">Cut the subject out, then keep it transparent or fill a color.</p>
+              <div class="controls__actions">
+                <button type="button" class="btn btn--primary" id="remove-bg">Remove background</button>
+                <button type="button" class="btn" id="restore-bg">Restore original</button>
+              </div>
+              <p class="sidebar__label" style="padding:16px 0 8px;">Fill</p>
+              <div class="swatches" id="swatches" role="group" aria-label="Background presets"></div>
+              <label class="custom-color" for="color-picker">
+                <span>Custom color</span>
+                <span class="custom-color__row">
+                  <input id="color-picker" type="color" value="#FFFFFF" />
+                  <input id="hex-input" type="text" maxlength="7" spellcheck="false" placeholder="#RRGGBB" aria-label="Hex color" />
+                </span>
+              </label>
+            </section>
+
+            <section class="panel" data-panel="export" hidden>
+              <h2>Export</h2>
+              <p class="controls__lead">Convert and download. JPEG and WebP ignore transparency — pick a fill first if you need a solid backdrop.</p>
+              <label class="field">
+                <span>Format</span>
+                <select id="export-format">
+                  <option value="png">PNG</option>
+                  <option value="jpeg">JPEG</option>
+                  <option value="webp">WebP</option>
+                </select>
+              </label>
+              <label class="field" id="quality-field">
+                <span>Quality <em id="quality-label">92</em></span>
+                <input id="export-quality" type="range" min="40" max="100" value="92" />
+              </label>
+              <div class="controls__actions">
+                <button type="button" class="btn btn--primary" id="download-btn" disabled>Download</button>
+                <button type="button" class="btn" id="reset-btn">New image</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </div>
+    <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Hide tools">‹</button>
+  </div>
+</body>
+</html>

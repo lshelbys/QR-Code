@@ -1,5 +1,7 @@
+const SIDEBAR_KEY = "duckingo.sidebarCollapsed";
 const app = document.getElementById("app");
 const menuBtn = document.getElementById("menu-btn");
+const sidebarToggle = document.getElementById("sidebar-toggle");
 const thread = document.getElementById("chat-thread");
 const inner = document.getElementById("chat-inner");
 const empty = document.getElementById("empty-state");
@@ -67,6 +69,30 @@ function send(text) {
     scrollThread();
   }, 700);
 }
+
+function applySidebar(collapsed) {
+  app.classList.toggle("sidebar-collapsed", collapsed);
+  if (sidebarToggle) {
+    sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+    sidebarToggle.setAttribute("aria-label", collapsed ? "Show tools" : "Hide tools");
+    sidebarToggle.textContent = collapsed ? "›" : "‹";
+  }
+  try {
+    localStorage.setItem(SIDEBAR_KEY, collapsed ? "1" : "0");
+  } catch {
+    /* ignore */
+  }
+}
+
+try {
+  applySidebar(localStorage.getItem(SIDEBAR_KEY) === "1");
+} catch {
+  applySidebar(false);
+}
+
+sidebarToggle?.addEventListener("click", () => {
+  applySidebar(!app.classList.contains("sidebar-collapsed"));
+});
 
 menuBtn?.addEventListener("click", () => {
   const open = app.classList.toggle("nav-open");

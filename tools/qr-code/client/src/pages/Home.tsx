@@ -1,4 +1,4 @@
-import { backgroundRemoverHref, hubHref } from "@/lib/base";
+import { hubHref, imageStudioHref } from "@/lib/base";
 import * as QRCode from "qrcode";
 import {
   AtSign,
@@ -477,6 +477,7 @@ export default function Home() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [openPanel, setOpenPanel] = useState<"colors" | "logo" | "design" | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
   const [statsEnabled, setStatsEnabled] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -599,11 +600,36 @@ export default function Home() {
 
   useEffect(() => {
     document.body.classList.add("is-ready");
-    const onScroll = () => setNavScrolled(window.scrollY > 8);
+    try {
+      setSidebarCollapsed(localStorage.getItem("duckingo.sidebarCollapsed") === "1");
+    } catch {
+      /* ignore */
+    }
+    const scroller = document.querySelector(".workspace-main");
+    const onScroll = () => {
+      const top = scroller instanceof HTMLElement ? scroller.scrollTop : window.scrollY;
+      setNavScrolled(top > 8);
+    };
     onScroll();
+    scroller?.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      scroller?.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((current) => {
+      const next = !current;
+      try {
+        localStorage.setItem("duckingo.sidebarCollapsed", next ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
 
   const renderFields = () => {
     if (contentType === "TEXT") return <Field label="Your Text" value={form.text} onChange={(v) => updateField("text", v)} multiline placeholder="Line breaks are allowed" />;
@@ -764,7 +790,7 @@ export default function Home() {
   };
 
   return (
-    <div className={mobileNavOpen ? "app nav-open" : "app"}>
+    <div className={`app${mobileNavOpen ? " nav-open" : ""}${sidebarCollapsed ? " sidebar-collapsed" : ""}`}>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
@@ -796,8 +822,8 @@ export default function Home() {
                 </a>
               </li>
               <li>
-                <a href={backgroundRemoverHref} className="nav__link" onClick={() => setMobileNavOpen(false)}>
-                  Background Remover
+                <a href={imageStudioHref} className="nav__link" onClick={() => setMobileNavOpen(false)}>
+                  Image Studio
                 </a>
               </li>
             </ul>
@@ -805,6 +831,56 @@ export default function Home() {
         </div>
       </nav>
 
+      <div className="workspace">
+        <aside className="sidebar" id="sidebar" aria-label="Tools">
+          <a className="btn btn--primary sidebar__new" href={hubHref}>
+            ＋ New chat
+          </a>
+          <p className="sidebar__label">Assistant</p>
+          <ul className="tool-list">
+            <li>
+              <a className="tool-item" href={hubHref}>
+                <span className="tool-item__icon" aria-hidden="true">
+                  ✦
+                </span>
+                <span className="tool-item__meta">
+                  <span className="tool-item__name">Duckingo Chat</span>
+                  <span className="tool-item__hint">Ask anything</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p className="sidebar__label" style={{ marginTop: 22 }}>
+            Tools
+          </p>
+          <ul className="tool-list">
+            <li>
+              <a className="tool-item is-active" href="#generator">
+                <span className="tool-item__icon" aria-hidden="true">
+                  ▣
+                </span>
+                <span className="tool-item__meta">
+                  <span className="tool-item__name">QR Code Generator</span>
+                  <span className="tool-item__hint">Create and export codes</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a className="tool-item" href={imageStudioHref}>
+                <span className="tool-item__icon" aria-hidden="true">
+                  ▦
+                </span>
+                <span className="tool-item__meta">
+                  <span className="tool-item__name">Image Studio</span>
+                  <span className="tool-item__hint">Crop, cut out, convert</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p className="sidebar__foot">Generated on this device</p>
+        </aside>
+
+        <div className="workspace-main">
       <main id="main-content">
         <section className="section section--bordered" id="generator" aria-labelledby="generator-title">
           <div className="container">
@@ -1044,14 +1120,27 @@ export default function Home() {
               <a href="#generator" className="footer__link">
                 QR Code
               </a>
-              <a href={backgroundRemoverHref} className="footer__link">
-                Background Remover
+              <a href={imageStudioHref} className="footer__link">
+                Image Studio
               </a>
             </nav>
             <span className="footer__copy">© {new Date().getFullYear()} Duckingo. All-in-one tools.</span>
           </div>
         </div>
       </footer>
+        </div>
+      </div>
+      <button
+        type="button"
+        className="sidebar-toggle"
+        id="sidebar-toggle"
+        aria-controls="sidebar"
+        aria-expanded={!sidebarCollapsed}
+        aria-label={sidebarCollapsed ? "Show tools" : "Hide tools"}
+        onClick={toggleSidebar}
+      >
+        {sidebarCollapsed ? "›" : "‹"}
+      </button>
     </div>
   );
 }

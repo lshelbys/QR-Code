@@ -6,7 +6,7 @@ const repoRoot = path.resolve(import.meta.dirname, "../..");
 
 export default defineConfig({
   root: path.resolve(import.meta.dirname, "client"),
-  base: githubPages ? "/QR-Code/tools/background-remover/" : "/",
+  base: githubPages ? "/QR-Code/tools/image-studio/" : "/",
   publicDir: path.resolve(import.meta.dirname, "client/public"),
   build: {
     outDir: path.resolve(import.meta.dirname, githubPages ? "docs" : "dist"),
@@ -21,14 +21,14 @@ export default defineConfig({
     },
   },
   server: {
-    port: 4177,
+    port: 4178,
     host: true,
     fs: {
       allow: [repoRoot],
     },
   },
   preview: {
-    port: 4177,
+    port: 4178,
     host: true,
   },
 });
