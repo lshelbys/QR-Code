@@ -839,7 +839,7 @@ export default function Home() {
           <p className="sidebar__label">Assistant</p>
           <ul className="tool-list">
             <li>
-              <a className="tool-item" href={hubHref}>
+              <a className="tool-item" href={hubHref} title="Duckingo Chat">
                 <span className="tool-item__icon" aria-hidden="true">
                   ✦
                 </span>
@@ -855,7 +855,7 @@ export default function Home() {
           </p>
           <ul className="tool-list">
             <li>
-              <a className="tool-item is-active" href="#generator">
+              <a className="tool-item is-active" href="#generator" title="QR Code Generator">
                 <span className="tool-item__icon" aria-hidden="true">
                   ▣
                 </span>
@@ -866,7 +866,7 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <a className="tool-item" href={imageStudioHref}>
+              <a className="tool-item" href={imageStudioHref} title="Image Studio">
                 <span className="tool-item__icon" aria-hidden="true">
                   ▦
                 </span>
@@ -1136,7 +1136,7 @@ export default function Home() {
         id="sidebar-toggle"
         aria-controls="sidebar"
         aria-expanded={!sidebarCollapsed}
-        aria-label={sidebarCollapsed ? "Show tools" : "Hide tools"}
+        aria-label={sidebarCollapsed ? "Expand tools" : "Collapse tools"}
         onClick={toggleSidebar}
       >
         {sidebarCollapsed ? "›" : "‹"}

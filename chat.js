@@ -74,7 +74,7 @@ function applySidebar(collapsed) {
   app.classList.toggle("sidebar-collapsed", collapsed);
   if (sidebarToggle) {
     sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
-    sidebarToggle.setAttribute("aria-label", collapsed ? "Show tools" : "Hide tools");
+    sidebarToggle.setAttribute("aria-label", collapsed ? "Expand tools" : "Collapse tools");
     sidebarToggle.textContent = collapsed ? "›" : "‹";
   }
   try {

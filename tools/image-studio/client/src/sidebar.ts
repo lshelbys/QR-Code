@@ -8,7 +8,7 @@ export function initSidebar(app: HTMLElement) {
     app.classList.toggle("sidebar-collapsed", collapsed);
     if (btn) {
       btn.setAttribute("aria-expanded", String(!collapsed));
-      btn.setAttribute("aria-label", collapsed ? "Show tools" : "Hide tools");
+      btn.setAttribute("aria-label", collapsed ? "Expand tools" : "Collapse tools");
       btn.textContent = collapsed ? "›" : "‹";
     }
     try {

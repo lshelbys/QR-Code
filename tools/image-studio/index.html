@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Duckingo Image Studio — crop, resize, remove backgrounds, and export PNG, JPEG, or WebP." />
+  <meta name="description" content="Duckingo Image Studio — crop, transform, remove backgrounds, adjust, and export PNG, JPEG, or WebP." />
   <title>Image Studio — Duckingo</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="/QR-Code/tools/image-studio/assets/index-CwmUgIpu.js"></script>
-  <link rel="stylesheet" crossorigin href="/QR-Code/tools/image-studio/assets/index-BhO5ubKD.css">
+  <script type="module" crossorigin src="/QR-Code/tools/image-studio/assets/index-DLll9FXr.js"></script>
+  <link rel="stylesheet" crossorigin href="/QR-Code/tools/image-studio/assets/index-DB93nOO1.css">
 </head>
 <body>
-  <a class="skip-link" href="#stage">Skip to canvas</a>
+  <a class="skip-link" href="#stage-wrap">Skip to canvas</a>
   <div class="app" id="app">
     <nav class="nav" role="navigation" aria-label="Main navigation">
       <div class="container">
@@ -32,11 +32,11 @@
 
     <div class="workspace">
       <aside class="sidebar" id="sidebar" aria-label="Tools">
-        <a class="btn btn--primary sidebar__new" href="../../">＋ New chat</a>
+        <a class="btn btn--primary sidebar__new" href="../../" title="New chat">＋ New chat</a>
         <p class="sidebar__label">Assistant</p>
         <ul class="tool-list">
           <li>
-            <a class="tool-item" href="../../">
+            <a class="tool-item" href="../../" title="Duckingo Chat">
               <span class="tool-item__icon" aria-hidden="true">✦</span>
               <span class="tool-item__meta">
                 <span class="tool-item__name">Duckingo Chat</span>
@@ -48,7 +48,7 @@
         <p class="sidebar__label" style="margin-top:22px;">Tools</p>
         <ul class="tool-list">
           <li>
-            <a class="tool-item" href="../qr-code/">
+            <a class="tool-item" href="../qr-code/" title="QR Code Generator">
               <span class="tool-item__icon" aria-hidden="true">▣</span>
               <span class="tool-item__meta">
                 <span class="tool-item__name">QR Code Generator</span>
@@ -57,7 +57,7 @@
             </a>
           </li>
           <li>
-            <a class="tool-item is-active" href="./">
+            <a class="tool-item is-active" href="./" title="Image Studio">
               <span class="tool-item__icon" aria-hidden="true">▦</span>
               <span class="tool-item__meta">
                 <span class="tool-item__name">Image Studio</span>
@@ -66,34 +66,52 @@
             </a>
           </li>
         </ul>
-        <p class="sidebar__foot">Crop · Resize · Background · Export</p>
+        <p class="sidebar__foot">Crop · Transform · Cutout · Export</p>
       </aside>
 
       <section class="studio" aria-label="Image studio">
-        <header class="chat__header">
-          <div class="chat__identity">
+        <header class="studio-bar">
+          <div class="studio-bar__identity">
             <span class="mark" aria-hidden="true">▦</span>
             <div>
               <p class="chat__title">Image Studio</p>
-              <p class="chat__sub">Upload once, then crop, resize, remove the background, and export</p>
+              <p class="chat__sub" id="doc-name">Drop a photo, then edit on this canvas</p>
             </div>
           </div>
-          <span class="badge">In browser</span>
+          <div class="studio-bar__actions">
+            <button type="button" class="btn btn--sm" id="undo-btn" disabled title="Undo (Ctrl+Z)">Undo</button>
+            <button type="button" class="btn btn--sm" id="redo-btn" disabled title="Redo (Ctrl+Shift+Z)">Redo</button>
+            <span class="studio-bar__zoom">
+              <button type="button" class="btn btn--sm btn--icon" id="zoom-out" aria-label="Zoom out">−</button>
+              <button type="button" class="btn btn--sm" id="zoom-label">Fit</button>
+              <button type="button" class="btn btn--sm btn--icon" id="zoom-in" aria-label="Zoom in">+</button>
+            </span>
+            <button type="button" class="btn btn--sm" id="replace-btn" disabled>Replace</button>
+            <button type="button" class="btn btn--primary btn--sm" id="download-top" disabled>Download</button>
+          </div>
         </header>
 
         <div class="studio-shell">
           <nav class="rail" aria-label="Studio tools">
             <button type="button" class="rail__btn is-active" data-tool="crop" title="Crop">
-              <span aria-hidden="true">▭</span><span>Crop</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v15h15M3 6h15v15" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Crop</span>
             </button>
-            <button type="button" class="rail__btn" data-tool="resize" title="Resize">
-              <span aria-hidden="true">⤢</span><span>Resize</span>
+            <button type="button" class="rail__btn" data-tool="transform" title="Resize, rotate, flip">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V4h4M20 16v4h-4M20 8l-7 7M4 16l7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Transform</span>
             </button>
-            <button type="button" class="rail__btn" data-tool="background" title="Background">
-              <span aria-hidden="true">◇</span><span>Background</span>
+            <button type="button" class="rail__btn" data-tool="cutout" title="Remove background">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Cutout</span>
+            </button>
+            <button type="button" class="rail__btn" data-tool="adjust" title="Brightness and color">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Adjust</span>
             </button>
             <button type="button" class="rail__btn" data-tool="export" title="Export">
-              <span aria-hidden="true">⇩</span><span>Export</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Export</span>
             </button>
           </nav>
 
@@ -102,29 +120,41 @@
             <div id="empty-panel">
               <div class="dropzone" id="dropzone">
                 <input id="file-input" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,.png,.jpg,.jpeg,.webp,.bmp" />
-                <p class="empty__eyebrow">PNG · JPG · WebP</p>
-                <h1 class="empty__title">Drop a photo to start</h1>
-                <p class="empty__lead">Crop, resize, cut out the background, then export PNG, JPEG, or WebP — all in one desk.</p>
+                <p class="empty__eyebrow">PNG · JPG · WebP · BMP</p>
+                <h1 class="empty__title">Edit a photo in one place</h1>
+                <p class="empty__lead">Crop, resize, rotate, cut out the background, tweak color, then export PNG, JPEG, or WebP.</p>
                 <button type="button" class="btn btn--primary" id="browse-btn">Choose image</button>
-                <p class="composer__note" style="margin-top:16px;">You can also paste an image from the clipboard.</p>
+                <ul class="feature-chips" aria-hidden="true">
+                  <li>Crop</li>
+                  <li>Resize</li>
+                  <li>Rotate</li>
+                  <li>Cutout</li>
+                  <li>Adjust</li>
+                  <li>Convert</li>
+                </ul>
+                <p class="composer__note" style="margin-top:16px;">Drop a file, paste from the clipboard, or browse.</p>
               </div>
             </div>
 
             <div id="workspace-panel" hidden>
-              <div class="stage-wrap">
+              <div class="stage-wrap stage--check" id="stage-wrap">
                 <div class="stage" id="stage">
                   <img id="preview" alt="" />
                   <div class="crop" id="crop" hidden>
                     <div class="crop__box" id="crop-box">
                       <span class="crop__handle" data-handle="nw"></span>
+                      <span class="crop__handle" data-handle="n"></span>
                       <span class="crop__handle" data-handle="ne"></span>
-                      <span class="crop__handle" data-handle="sw"></span>
+                      <span class="crop__handle" data-handle="e"></span>
                       <span class="crop__handle" data-handle="se"></span>
+                      <span class="crop__handle" data-handle="s"></span>
+                      <span class="crop__handle" data-handle="sw"></span>
+                      <span class="crop__handle" data-handle="w"></span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="status-row">
+              <div class="canvas-hud">
                 <progress id="progress" max="100" value="0" hidden></progress>
                 <p id="status" class="status-text"></p>
                 <p id="meta" class="meta-text"></p>
@@ -135,7 +165,7 @@
           <aside class="inspector" aria-label="Tool settings">
             <section class="panel" data-panel="crop">
               <h2>Crop</h2>
-              <p class="controls__lead">Drag the box on the canvas. Apply to keep only that region.</p>
+              <p class="controls__lead">Drag the box or type sizes. Apply to keep that region.</p>
               <label class="field">
                 <span>Aspect</span>
                 <select id="crop-aspect">
@@ -144,42 +174,52 @@
                   <option value="1.333">4:3</option>
                   <option value="1.777">16:9</option>
                   <option value="0.8">4:5</option>
+                  <option value="1.5">3:2</option>
                 </select>
               </label>
+              <div class="size-row">
+                <label class="field"><span>X</span><input id="crop-x" type="number" min="0" /></label>
+                <label class="field"><span>Y</span><input id="crop-y" type="number" min="0" /></label>
+              </div>
+              <div class="size-row">
+                <label class="field"><span>Width</span><input id="crop-w" type="number" min="8" /></label>
+                <label class="field"><span>Height</span><input id="crop-h" type="number" min="8" /></label>
+              </div>
               <div class="controls__actions">
                 <button type="button" class="btn btn--primary" id="crop-apply">Apply crop</button>
                 <button type="button" class="btn" id="crop-reset">Reset crop</button>
               </div>
             </section>
 
-            <section class="panel" data-panel="resize" hidden>
-              <h2>Resize</h2>
-              <p class="controls__lead">Set the export size in pixels. Lock ratio to keep proportions.</p>
+            <section class="panel" data-panel="transform" hidden>
+              <h2>Transform</h2>
+              <p class="controls__lead">Resize the export, rotate in 90° steps, or flip the canvas.</p>
               <label class="check">
                 <input type="checkbox" id="lock-ratio" checked />
                 <span>Lock aspect ratio</span>
               </label>
               <div class="size-row">
-                <label class="field">
-                  <span>Width</span>
-                  <input id="resize-w" type="number" min="1" max="8192" />
-                </label>
-                <label class="field">
-                  <span>Height</span>
-                  <input id="resize-h" type="number" min="1" max="8192" />
-                </label>
+                <label class="field"><span>Width</span><input id="resize-w" type="number" min="1" max="8192" /></label>
+                <label class="field"><span>Height</span><input id="resize-h" type="number" min="1" max="8192" /></label>
               </div>
               <div class="preset-row">
                 <button type="button" class="btn btn--sm" data-scale="1">100%</button>
                 <button type="button" class="btn btn--sm" data-scale="0.5">50%</button>
-                <button type="button" class="btn btn--sm" data-width="1920">1920 wide</button>
-                <button type="button" class="btn btn--sm" data-width="1080">1080 wide</button>
+                <button type="button" class="btn btn--sm" data-width="1920">1920</button>
+                <button type="button" class="btn btn--sm" data-width="1080">1080</button>
+              </div>
+              <p class="sidebar__label" style="padding:18px 0 8px;">Rotate &amp; flip</p>
+              <div class="preset-row">
+                <button type="button" class="btn btn--sm" id="rotate-ccw">↺ 90°</button>
+                <button type="button" class="btn btn--sm" id="rotate-cw">↻ 90°</button>
+                <button type="button" class="btn btn--sm" id="flip-h">Flip H</button>
+                <button type="button" class="btn btn--sm" id="flip-v">Flip V</button>
               </div>
             </section>
 
-            <section class="panel" data-panel="background" hidden>
-              <h2>Background</h2>
-              <p class="controls__lead">Cut the subject out, then keep it transparent or fill a color.</p>
+            <section class="panel" data-panel="cutout" hidden>
+              <h2>Cutout</h2>
+              <p class="controls__lead">Remove the background in the browser, then keep it clear or fill a color.</p>
               <div class="controls__actions">
                 <button type="button" class="btn btn--primary" id="remove-bg">Remove background</button>
                 <button type="button" class="btn" id="restore-bg">Restore original</button>
@@ -195,21 +235,33 @@
               </label>
             </section>
 
+            <section class="panel" data-panel="adjust" hidden>
+              <h2>Adjust</h2>
+              <p class="controls__lead">Light, contrast, and color live on the canvas. They bake in on export.</p>
+              <label class="field">
+                <span>Brightness <em id="brightness-label">100</em></span>
+                <input id="brightness" type="range" min="40" max="160" value="100" />
+              </label>
+              <label class="field">
+                <span>Contrast <em id="contrast-label">100</em></span>
+                <input id="contrast" type="range" min="40" max="160" value="100" />
+              </label>
+              <label class="field">
+                <span>Saturation <em id="saturation-label">100</em></span>
+                <input id="saturation" type="range" min="0" max="200" value="100" />
+              </label>
+              <button type="button" class="btn" id="reset-adjust">Reset adjustments</button>
+            </section>
+
             <section class="panel" data-panel="export" hidden>
               <h2>Export</h2>
-              <p class="controls__lead">Convert and download. JPEG and WebP ignore transparency — pick a fill first if you need a solid backdrop.</p>
-              <label class="field">
-                <span>Format</span>
-                <select id="export-format">
-                  <option value="png">PNG</option>
-                  <option value="jpeg">JPEG</option>
-                  <option value="webp">WebP</option>
-                </select>
-              </label>
+              <p class="controls__lead">JPEG and WebP flatten transparency — pick a fill in Cutout first if you need a solid backdrop.</p>
+              <div class="format-grid" id="format-grid"></div>
               <label class="field" id="quality-field">
                 <span>Quality <em id="quality-label">92</em></span>
                 <input id="export-quality" type="range" min="40" max="100" value="92" />
               </label>
+              <p class="meta-text" id="export-estimate"></p>
               <div class="controls__actions">
                 <button type="button" class="btn btn--primary" id="download-btn" disabled>Download</button>
                 <button type="button" class="btn" id="reset-btn">New image</button>
@@ -219,7 +271,7 @@
         </div>
       </section>
     </div>
-    <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Hide tools">‹</button>
+    <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Collapse tools">‹</button>
   </div>
 </body>
 </html>
