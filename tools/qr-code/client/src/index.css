@@ -32,6 +32,8 @@
   --transition: 160ms ease;
   --transition-slow: 280ms ease;
   --max-w:      1200px;
+  --nav-h:      64px;
+  --sidebar-w:  280px;
 
   --background: var(--white);
   --foreground: var(--black);
@@ -95,13 +97,139 @@ html.js body { opacity: 0; }
 html.js body.is-ready { opacity: 1; }
 .app.nav-open { overflow: hidden; }
 
-#root { min-height: 100vh; }
+html, body, #root {
+  height: 100%;
+}
+#root { min-height: 100%; }
 .app {
-  min-height: 100vh;
+  position: relative;
+  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--white);
   color: var(--black);
+  overflow: hidden;
+}
+
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 0;
+}
+.workspace-main {
+  min-width: 0;
+  overflow: auto;
+}
+.sidebar {
+  border-right: 2px solid var(--black);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px 16px;
+}
+.sidebar__new {
+  width: 100%;
+  margin-bottom: 28px;
+}
+.sidebar__label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  padding: 0 6px 10px;
+}
+.tool-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--black);
+  text-align: left;
+  font-size: .9rem;
+  font-weight: 700;
+}
+.tool-item:hover { background: var(--gray-50); border-color: var(--gray-200); }
+.tool-item.is-active {
+  border-color: var(--black);
+  background: var(--white);
+}
+.tool-item__icon {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--black);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: var(--white);
+}
+.tool-item__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.tool-item__name { line-height: 1.2; }
+.tool-item__hint {
+  font-size: .72rem;
+  font-weight: 400;
+  color: var(--gray-500);
+}
+.sidebar__foot {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: .75rem;
+  color: var(--gray-400);
+}
+.sidebar-toggle {
+  position: absolute;
+  top: calc(var(--nav-h) + 14px);
+  left: calc(var(--sidebar-w) - 16px);
+  z-index: 120;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--black);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--black);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: var(--shadow-sm);
+}
+.sidebar-toggle:hover {
+  background: var(--black);
+  color: var(--white);
+}
+.app.sidebar-collapsed .workspace {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+.app.sidebar-collapsed .sidebar {
+  min-width: 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  border-right-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.app.sidebar-collapsed .sidebar-toggle {
+  left: 8px;
 }
 
 img { display: block; max-width: 100%; }
@@ -232,6 +360,7 @@ textarea.input {
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-shrink: 0;
   background: var(--white);
   border-bottom: 2px solid var(--black);
   transition: box-shadow var(--transition);
@@ -1059,6 +1188,28 @@ textarea.input {
 
 @media (max-width: 768px) {
   .container { padding: 0 16px; }
+  .workspace { grid-template-columns: 1fr; }
+  .sidebar-toggle { display: none; }
+  .app.sidebar-collapsed .workspace { grid-template-columns: 1fr; }
+  .app.sidebar-collapsed .sidebar {
+    width: min(100%, 320px);
+    padding: 20px 16px;
+    overflow: auto;
+    border-right-width: 2px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sidebar {
+    display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    bottom: 0;
+    width: min(100%, 320px);
+    z-index: 80;
+    box-shadow: var(--shadow-lg);
+  }
+  .app.nav-open .sidebar { display: flex; }
   .nav__menu-btn { display: inline-flex; }
   .nav__links {
     display: none;

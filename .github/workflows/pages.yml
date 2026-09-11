@@ -9,11 +9,11 @@ on:
       - "tools/qr-code/assets/**"
       - "tools/qr-code/.nojekyll"
       - "tools/qr-code/favicon.svg"
-      - "tools/background-remover/index.html"
-      - "tools/background-remover/404.html"
-      - "tools/background-remover/assets/**"
-      - "tools/background-remover/.nojekyll"
-      - "tools/background-remover/favicon.svg"
+      - "tools/image-studio/index.html"
+      - "tools/image-studio/404.html"
+      - "tools/image-studio/assets/**"
+      - "tools/image-studio/.nojekyll"
+      - "tools/image-studio/favicon.svg"
   workflow_dispatch:
 
 permissions:
@@ -37,14 +37,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: |
             tools/qr-code/pnpm-lock.yaml
-            tools/background-remover/pnpm-lock.yaml
+            tools/image-studio/pnpm-lock.yaml
       - name: Build QR tool
         working-directory: tools/qr-code
         run: |
           pnpm install --frozen-lockfile
           pnpm run build:pages
-      - name: Build background remover
-        working-directory: tools/background-remover
+      - name: Build Image Studio
+        working-directory: tools/image-studio
         run: |
           pnpm install --frozen-lockfile
           pnpm run build:pages
@@ -53,7 +53,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add tools/qr-code/index.html tools/qr-code/404.html tools/qr-code/.nojekyll tools/qr-code/favicon.svg tools/qr-code/assets
-          git add tools/background-remover/index.html tools/background-remover/404.html tools/background-remover/.nojekyll tools/background-remover/favicon.svg tools/background-remover/assets
+          git add tools/image-studio/index.html tools/image-studio/404.html tools/image-studio/.nojekyll tools/image-studio/favicon.svg tools/image-studio/assets
           if git diff --staged --quiet; then
             echo "No Pages file changes"
           else

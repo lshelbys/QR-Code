@@ -4,4 +4,4 @@ export const generatorHref = `${BASE_URL}#generator`;
 export const hubHref = BASE_URL.includes("/tools/qr-code")
   ? BASE_URL.replace(/tools\/qr-code\/?$/, "")
   : BASE_URL;
-export const backgroundRemoverHref = `${hubHref.endsWith("/") ? hubHref : `${hubHref}/`}tools/background-remover/`;
+export const imageStudioHref = `${hubHref.endsWith("/") ? hubHref : `${hubHref}/`}tools/image-studio/`;

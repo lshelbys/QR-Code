@@ -27,4 +27,4 @@ if (existsSync(faviconSrc)) {
   copyFileSync(faviconSrc, path.join(root, "favicon.svg"));
 }
 
-console.log("Published GitHub Pages files for the background remover.");
+console.log("Published GitHub Pages files for Image Studio.");

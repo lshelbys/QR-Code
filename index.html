@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Duckingo — an all-in-one workspace for AI chat and everyday tools. QR codes, background removal, and more." />
+  <meta name="description" content="Duckingo — an all-in-one workspace for AI chat and everyday tools. QR codes, Image Studio, and more." />
   <title>Duckingo</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,14 +23,14 @@
           <ul class="nav__links" role="list">
             <li><a href="./" class="nav__link is-active">Chat</a></li>
             <li><a href="./tools/qr-code/" class="nav__link">QR Code</a></li>
-            <li><a href="./tools/background-remover/" class="nav__link">Background Remover</a></li>
+            <li><a href="./tools/image-studio/" class="nav__link">Image Studio</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
     <div class="workspace">
-      <aside class="sidebar" aria-label="Tools">
+      <aside class="sidebar" id="sidebar" aria-label="Tools">
         <button type="button" class="btn btn--primary sidebar__new" id="new-chat-btn">＋ New chat</button>
         <p class="sidebar__label">Assistant</p>
         <ul class="tool-list">
@@ -56,31 +56,13 @@
             </a>
           </li>
           <li>
-            <a class="tool-item" href="./tools/background-remover/">
-              <span class="tool-item__icon" aria-hidden="true">◇</span>
-              <span class="tool-item__meta">
-                <span class="tool-item__name">Background Remover</span>
-                <span class="tool-item__hint">Cut out, then color</span>
-              </span>
-            </a>
-          </li>
-          <li>
-            <button type="button" class="tool-item is-soon" disabled>
+            <a class="tool-item" href="./tools/image-studio/">
               <span class="tool-item__icon" aria-hidden="true">▦</span>
               <span class="tool-item__meta">
                 <span class="tool-item__name">Image Studio</span>
-                <span class="tool-item__hint">Coming soon</span>
+                <span class="tool-item__hint">Crop, cut out, convert</span>
               </span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="tool-item is-soon" disabled>
-              <span class="tool-item__icon" aria-hidden="true">☰</span>
-              <span class="tool-item__meta">
-                <span class="tool-item__name">File Converter</span>
-                <span class="tool-item__hint">Coming soon</span>
-              </span>
-            </button>
+            </a>
           </li>
         </ul>
         <p class="sidebar__foot">All-in-one tools · Light workspace</p>
@@ -113,9 +95,9 @@
                   <span class="suggest__label">Write a product intro</span>
                   <span class="suggest__hint">Clean copy, ready to paste</span>
                 </button>
-                <button type="button" class="suggest" data-prompt="Plan a simple workflow to remove a photo background, then export a QR for the result.">
+                <button type="button" class="suggest" data-prompt="Plan a simple workflow to crop a photo, remove the background, and export PNG or JPEG.">
                   <span class="suggest__label">Plan a tool workflow</span>
-                  <span class="suggest__hint">QR + background removal together</span>
+                  <span class="suggest__hint">Image Studio + QR together</span>
                 </button>
                 <button type="button" class="suggest" data-prompt="Give me 5 high-end names for a client-facing report.">
                   <span class="suggest__label">Name a deliverable</span>
@@ -140,6 +122,7 @@
         </form>
       </section>
     </div>
+    <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Hide tools">‹</button>
   </div>
   <script src="./chat.js"></script>
 </body>
