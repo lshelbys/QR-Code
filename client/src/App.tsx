@@ -2,12 +2,14 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { useEffect } from "react";
-import { Route, Switch } from "wouter";
+import { Route, Router, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
-function Router() {
+const routerBase = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function Routes() {
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -27,7 +29,9 @@ export default function App() {
       <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
           <Toaster position="bottom-right" />
-          <Router />
+          <Router base={routerBase}>
+            <Routes />
+          </Router>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

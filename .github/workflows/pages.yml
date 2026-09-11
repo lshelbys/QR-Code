@@ -1,0 +1,45 @@
+name: Build GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "index.html"
+      - "404.html"
+      - "assets/**"
+      - ".nojekyll"
+      - "favicon.svg"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build:pages
+      - name: Commit Pages files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html 404.html .nojekyll favicon.svg assets
+          if git diff --staged --quiet; then
+            echo "No Pages file changes"
+          else
+            git commit -m "Update GitHub Pages build [skip ci]"
+            git push
+          fi

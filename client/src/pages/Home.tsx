@@ -1,4 +1,5 @@
 import { useTheme } from "@/contexts/ThemeContext";
+import { homeHref } from "@/lib/base";
 import * as QRCode from "qrcode";
 import {
   AtSign,
@@ -773,7 +774,7 @@ export default function Home() {
       <nav className={navScrolled ? "nav nav--scrolled" : "nav"} role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className={`nav__inner${mobileNavOpen ? " nav--open" : ""}`}>
-            <a href="/" className="nav__logo">
+            <a href={homeHref} className="nav__logo">
               qr <span>studio</span>
             </a>
             <button

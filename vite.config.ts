@@ -204,9 +204,11 @@ function vitePluginStorageProxy(): Plugin {
 }
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const githubPages = Boolean(process.env.GITHUB_PAGES);
 
 export default defineConfig({
   plugins,
+  base: githubPages ? "/QR-Code/" : "/",
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -217,7 +219,7 @@ export default defineConfig({
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(import.meta.dirname, githubPages ? "docs" : "dist/public"),
     emptyOutDir: true,
   },
   server: {

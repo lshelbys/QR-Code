@@ -1,3 +1,4 @@
+import { generatorHref, homeHref } from "@/lib/base";
 import { useLocation } from "wouter";
 
 export default function NotFound() {
@@ -11,7 +12,7 @@ export default function NotFound() {
       <nav className="nav" role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className="nav__inner">
-            <a href="/" className="nav__logo">
+            <a href={homeHref} className="nav__logo">
               qr <span>studio</span>
             </a>
           </div>
@@ -26,7 +27,7 @@ export default function NotFound() {
             <button type="button" className="btn btn--primary" onClick={() => setLocation("/")}>
               Back to Home
             </button>
-            <a href="/#generator" className="btn">
+            <a href={generatorHref} className="btn">
               Open Generator
             </a>
           </div>
