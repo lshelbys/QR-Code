@@ -208,7 +208,7 @@ const githubPages = Boolean(process.env.GITHUB_PAGES);
 
 export default defineConfig({
   plugins,
-  base: githubPages ? "/QR-Code/" : "/",
+  base: githubPages ? "/QR-Code/tools/qr-code/" : "/",
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

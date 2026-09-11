@@ -1,4 +1,4 @@
-import { homeHref } from "@/lib/base";
+import { hubHref } from "@/lib/base";
 import * as QRCode from "qrcode";
 import {
   AtSign,
@@ -772,8 +772,8 @@ export default function Home() {
       <nav className={navScrolled ? "nav nav--scrolled" : "nav"} role="navigation" aria-label="Main navigation">
         <div className="container">
           <div className={`nav__inner${mobileNavOpen ? " nav--open" : ""}`}>
-            <a href={homeHref} className="nav__logo">
-              qr <span>studio</span>
+            <a href={hubHref} className="nav__logo">
+              Duckingo <span>qr</span>
             </a>
             <button
               type="button"
@@ -786,18 +786,13 @@ export default function Home() {
             </button>
             <ul className="nav__links" role="list">
               <li>
+                <a href={hubHref} className="nav__link" onClick={() => setMobileNavOpen(false)}>
+                  Chat
+                </a>
+              </li>
+              <li>
                 <a href="#generator" className="nav__link" onClick={() => setMobileNavOpen(false)}>
-                  Generator
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="nav__link" onClick={() => setMobileNavOpen(false)}>
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#privacy" className="nav__link" onClick={() => setMobileNavOpen(false)}>
-                  Privacy
+                  QR Code
                 </a>
               </li>
             </ul>
@@ -1036,19 +1031,16 @@ export default function Home() {
       <footer className="footer" role="contentinfo">
         <div className="container">
           <div className="footer__inner">
-            <span className="footer__brand">qr studio</span>
+            <span className="footer__brand">Duckingo</span>
             <nav className="footer__links" aria-label="Footer navigation">
+              <a href={hubHref} className="footer__link">
+                Chat
+              </a>
               <a href="#generator" className="footer__link">
-                Generator
-              </a>
-              <a href="#about" className="footer__link">
-                About
-              </a>
-              <a href="#privacy" className="footer__link">
-                Privacy
+                QR Code
               </a>
             </nav>
-            <span className="footer__copy">© {new Date().getFullYear()} qr studio. Built in the browser.</span>
+            <span className="footer__copy">© {new Date().getFullYear()} Duckingo. All-in-one tools.</span>
           </div>
         </div>
       </footer>

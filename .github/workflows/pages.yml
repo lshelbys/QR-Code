@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "index.html"
-      - "404.html"
-      - "assets/**"
-      - ".nojekyll"
-      - "favicon.svg"
+      - "tools/qr-code/index.html"
+      - "tools/qr-code/404.html"
+      - "tools/qr-code/assets/**"
+      - "tools/qr-code/.nojekyll"
+      - "tools/qr-code/favicon.svg"
   workflow_dispatch:
 
 permissions:
@@ -21,6 +21,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/qr-code
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -30,16 +33,18 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          cache-dependency-path: tools/qr-code/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build:pages
-      - name: Commit Pages files
+      - name: Commit QR tool Pages files
+        working-directory: .
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html 404.html .nojekyll favicon.svg assets
+          git add tools/qr-code/index.html tools/qr-code/404.html tools/qr-code/.nojekyll tools/qr-code/favicon.svg tools/qr-code/assets
           if git diff --staged --quiet; then
             echo "No Pages file changes"
           else
-            git commit -m "Update GitHub Pages build [skip ci]"
+            git commit -m "Update QR tool GitHub Pages build [skip ci]"
             git push
           fi
