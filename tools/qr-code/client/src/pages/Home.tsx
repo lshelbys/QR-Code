@@ -833,8 +833,8 @@ export default function Home() {
 
       <div className="workspace">
         <aside className="sidebar" id="sidebar" aria-label="Tools">
-          <a className="btn btn--primary sidebar__new" href={hubHref}>
-            ＋ New chat
+          <a className="btn btn--primary sidebar__new" href={hubHref} title="New chat">
+            ＋ <span className="sidebar__new-label">New chat</span>
           </a>
           <p className="sidebar__label">Assistant</p>
           <ul className="tool-list">

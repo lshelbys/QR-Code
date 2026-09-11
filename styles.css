@@ -335,10 +335,12 @@ button { cursor: pointer; }
 .app.sidebar-collapsed .tool-item__meta {
   display: none;
 }
+.app.sidebar-collapsed .sidebar__new-label {
+  display: none;
+}
 .app.sidebar-collapsed .sidebar__new {
-  padding-left: 0;
-  padding-right: 0;
-  font-size: 1.1rem;
+  padding: 10px 0;
+  font-size: 1.15rem;
 }
 .app.sidebar-collapsed .tool-item {
   justify-content: center;
@@ -634,6 +636,7 @@ button { cursor: pointer; }
   .app.sidebar-collapsed .sidebar__foot,
   .app.sidebar-collapsed .tool-item__meta { display: revert; }
   .app.sidebar-collapsed .tool-item { justify-content: flex-start; padding: 12px; }
+  .app.sidebar-collapsed .sidebar__new-label { display: inline; }
   .app.sidebar-collapsed .sidebar__new { font-size: .875rem; padding: 10px 20px; }
   .sidebar {
     display: none;
