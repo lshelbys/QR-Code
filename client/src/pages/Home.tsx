@@ -1,4 +1,3 @@
-import { useTheme } from "@/contexts/ThemeContext";
 import { homeHref } from "@/lib/base";
 import * as QRCode from "qrcode";
 import {
@@ -474,7 +473,6 @@ function DesignSelector({
 }
 
 export default function Home() {
-  const { theme, toggleTheme } = useTheme();
   const [contentType, setContentType] = useState<ContentType>("URL");
   const [form, setForm] = useState<FormState>(initialForm);
   const [openPanel, setOpenPanel] = useState<"colors" | "logo" | "design" | null>(null);
@@ -802,35 +800,12 @@ export default function Home() {
                   Privacy
                 </a>
               </li>
-              <li>
-                <button type="button" className="theme-toggle" onClick={toggleTheme} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"} title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
-                  {theme === "dark" ? "☀️" : "🌙"}
-                </button>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
 
       <main id="main-content">
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="container">
-            <p className="hero__eyebrow">Create · Style · Export</p>
-            <h1 className="hero__title" id="hero-title">
-              qr studio
-            </h1>
-            <p className="hero__sub">Hand-built, browser-only QR codes. Links, Wi-Fi, contacts, and more — styled the way you want, exported in seconds.</p>
-            <div className="hero__actions">
-              <button type="button" className="btn btn--primary" onClick={() => document.getElementById("generator")?.scrollIntoView({ behavior: "smooth" })}>
-                Create a QR Code
-              </button>
-              <a href="#about" className="btn">
-                How it works
-              </a>
-            </div>
-          </div>
-        </section>
-
         <section className="section section--bordered" id="generator" aria-labelledby="generator-title">
           <div className="container">
             <div className="section__header">

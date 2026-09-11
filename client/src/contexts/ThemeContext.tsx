@@ -16,17 +16,6 @@ interface ThemeProviderProps {
   switchable?: boolean;
 }
 
-function readStoredTheme(defaultTheme: Theme): Theme {
-  try {
-    const stored = localStorage.getItem("theme");
-    if (stored === "dark" || stored === "light") return stored;
-    if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) return "dark";
-  } catch {
-    /* ignore storage access */
-  }
-  return defaultTheme;
-}
-
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
   if (theme === "dark") {
@@ -45,18 +34,11 @@ export function ThemeProvider({
   defaultTheme = "light",
   switchable = true,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => (switchable ? readStoredTheme(defaultTheme) : defaultTheme));
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
 
   useEffect(() => {
     applyTheme(theme);
-    if (switchable) {
-      try {
-        localStorage.setItem("theme", theme);
-      } catch {
-        /* ignore storage access */
-      }
-    }
-  }, [theme, switchable]);
+  }, [theme]);
 
   const toggleTheme = switchable
     ? () => {
