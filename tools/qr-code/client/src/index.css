@@ -93,8 +93,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-html.js body { opacity: 0; }
-html.js body.is-ready { opacity: 1; }
 .app.nav-open { overflow: hidden; }
 
 html, body, #root {

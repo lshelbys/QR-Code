@@ -208,7 +208,7 @@ const githubPages = Boolean(process.env.GITHUB_PAGES);
 
 export default defineConfig({
   plugins,
-  base: githubPages ? "/project-duckingo/tools/qr-code/" : "/",
+  base: githubPages ? "./" : "/",
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

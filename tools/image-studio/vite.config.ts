@@ -6,7 +6,7 @@ const repoRoot = path.resolve(import.meta.dirname, "../..");
 
 export default defineConfig({
   root: path.resolve(import.meta.dirname, "client"),
-  base: githubPages ? "/project-duckingo/tools/image-studio/" : "/",
+  base: githubPages ? "./" : "/",
   publicDir: path.resolve(import.meta.dirname, "client/public"),
   build: {
     outDir: path.resolve(import.meta.dirname, githubPages ? "docs" : "dist"),

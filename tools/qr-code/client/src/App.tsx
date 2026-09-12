@@ -7,7 +7,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
-const routerBase = import.meta.env.BASE_URL.replace(/\/$/, "");
+const envBase = import.meta.env.BASE_URL;
+const routerBase =
+  envBase === "./"
+    ? window.location.pathname.replace(/\/index\.html$/, "").replace(/\/+$/, "")
+    : envBase.replace(/\/$/, "");
 
 function Routes() {
   return (

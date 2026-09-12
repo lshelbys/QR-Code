@@ -15,11 +15,6 @@
         document.documentElement.removeAttribute("data-theme");
         document.documentElement.classList.remove("dark");
         document.documentElement.classList.add("js");
-        window.addEventListener("DOMContentLoaded", function () {
-          setTimeout(function () {
-            if (document.body) document.body.classList.add("is-ready");
-          }, 2500);
-        });
       })();
     </script>
   </head>
